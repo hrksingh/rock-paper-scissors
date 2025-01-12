@@ -63,7 +63,11 @@ function getComputerChoice() {
 
 function displayChoice(selector, choice) {
   const element = document.querySelector(selector);
-  element.textContent = `You Choose: ${choice}`;
+  if (selector === ".human-choice") {
+    element.textContent = `You Choose: ${choice}`;
+  } else {
+    element.textContent = `Computer Choose: ${choice}`;
+  }
 }
 
 function getResult(userChoice, computerChoice) {
