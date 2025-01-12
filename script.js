@@ -1,105 +1,97 @@
-const ROCK = "rock";
-const PAPER = "paper";
-const SCISSORS = "scissors";
+const ROCK = "ROCK";
+const PAPER = "PAPER";
+const SCISSORS = "SCISSORS";
 let humanScore = 0;
 let computerScore = 0;
 let round = 1;
 
-console.log(`Starting 5 match round between Human and Computer`);
+const rspButtons = document.querySelectorAll(".rsp-button");
+const resetButton = document.getElementById("reset");
 
-while (round < 6) {
-  console.log(`Round -> ${round} started`);
-  game();
-  round++;
+rspButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const userInput = button.textContent.toUpperCase();
+    disableButtons(rspButtons);
+    const computerChoice = getComputerChoice();
+    displayChoice(".human-choice", userInput);
+    displayChoice(".computer-choice", computerChoice);
+    const result = getResult(userInput, computerChoice);
+    updateScores(result);
+
+    if (round === 5) {
+      updateRound(round++);
+      disableButtons(rspButtons);
+      displayResult();
+      const resetButton = document.getElementById("reset");
+      resetButton.style.display = "block";
+    } else {
+      updateRound(round++);
+      enableButtons(rspButtons);
+    }
+  });
+});
+
+resetButton.addEventListener("click", () => {
+  round = 1;
+  humanScore = 0;
+  computerScore = 0;
+  updateRound(round);
+  enableButtons(rspButtons);
+  document.querySelector(".human-choice").textContent = "You Choose: ";
+  document.querySelector(".computer-choice").textContent = "Computer Choose: ";
+  document.querySelector(".res-container").textContent = "Result: ";
+  const resetButton = document.getElementById("reset");
+  resetButton.style.display = "none";
+});
+
+function updateRound(round) {
+  document.getElementById("round-number").textContent = round;
 }
 
-if (humanScore > computerScore) {
-  console.log(
-    `Humans score ${humanScore}, Computer score ${computerScore}, Humans Won!!`
-  );
-  alert(
-    `Humans score ${humanScore}, Computer score ${computerScore}, Humans Won!!`
-  );
-} else if (humanScore < computerScore) {
-  console.log(
-    `Humans score ${humanScore}, Computer score ${computerScore}, Computer Won!!`
-  );
-  alert(
-    `Humans score ${humanScore}, Computer score ${computerScore}, Computer Won!!`
-  );
-} else {
-  console.log(
-    `Humans score ${humanScore}, Computer score ${computerScore}, Tie, Nobody won`
-  );
-  alert(
-    `Humans score ${humanScore}, Computer score ${computerScore}, Tie, Nobody won`
-  );
+function disableButtons(buttons) {
+  buttons.forEach((btn) => (btn.disabled = true));
 }
 
-function game() {
-  const userInput = prompt("Rock, Paper, Scissors -> Choose one")
-    .trim()
-    .toLowerCase();
+function enableButtons(buttons) {
+  buttons.forEach((btn) => (btn.disabled = false));
+}
 
-  function validateUserInput(userInput) {
-    if (
-      !(
-        userInput.includes(ROCK) ||
-        userInput.includes(PAPER) ||
-        userInput.includes(SCISSORS)
-      )
-    ) {
-      console.error(
-        `Your input(${userInput}) is wrong, accepted values Rock, Paper, Scissors`
-      );
-      return false;
-    }
-    return true;
+function getComputerChoice() {
+  const choices = [ROCK, PAPER, SCISSORS];
+  return choices[Math.floor(Math.random() * choices.length)];
+}
+
+function displayChoice(selector, choice) {
+  const element = document.querySelector(selector);
+  element.textContent = `You Choose: ${choice}`;
+}
+
+function getResult(userChoice, computerChoice) {
+  if (userChoice === computerChoice) return "Tie";
+  if (
+    (userChoice === ROCK && computerChoice === SCISSORS) ||
+    (userChoice === PAPER && computerChoice === ROCK) ||
+    (userChoice === SCISSORS && computerChoice === PAPER)
+  ) {
+    return "User Won";
   }
+  return "Computer Won";
+}
 
-  function getRandomDigit() {
-    return Math.floor(Math.random() * 3);
+function displayResult() {
+  let result;
+  if (humanScore < computerScore) {
+    result = "Computer Won";
+  } else {
+    result = "Human Won";
   }
+  const resultContainer = document.querySelector(".res-container");
+  resultContainer.textContent = `Result: ${result}`;
+}
 
-  function getComputerChoice() {
-    const randomValue = getRandomDigit();
-    switch (randomValue) {
-      case 0:
-        return ROCK;
-      case 1:
-        return PAPER;
-      case 2:
-        return SCISSORS;
-      default:
-        console.log(randomValue);
-    }
-  }
-
-  const computerChoice = getComputerChoice();
-
-  console.log(`Computer chose ${computerChoice}`);
-
-  function matchResult() {
-    if (validateUserInput(userInput)) {
-      console.log(`You chose ${userInput}`);
-
-      if (userInput === computerChoice) {
-        console.log("Tie");
-      } else if (
-        (userInput === ROCK && computerChoice === SCISSORS) ||
-        (userInput === PAPER && computerChoice === ROCK) ||
-        (userInput === SCISSORS && computerChoice === PAPER)
-      ) {
-        console.log(`${userInput} beats ${computerChoice}, User Won`);
-        humanScore++;
-      } else {
-        console.log(`${computerChoice} beats ${userInput}, Computer Won`);
-        computerScore++;
-      }
-    }
-  }
-
-  matchResult();
-
-  console.log(`Human score ${humanScore}, Computer score ${computerScore}`);
+function updateScores(result) {
+  if (result === "User Won") humanScore++;
+  if (result === "Computer Won") computerScore++;
+  document.getElementById("human-score").textContent = humanScore;
+  document.getElementById("computer-score").textContent = computerScore;
 }
