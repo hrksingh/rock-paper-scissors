@@ -4,8 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rock Paper Scissors</title>
+    <link rel="stylesheet" href="rsp.css" />
   </head>
   <body>
+    <h1>ROCK PAPER SCISSORS</h1>
+    <h3>Humans vs Computer</h3>
+
+    <span>Humans: What do you choose?</span>
+
+    <div class="rsp-buttons">
+      <button class="rsp-button" id="Rock">ROCK</button>
+      <button class="rsp-button" id="Paper">PAPER</button>
+      <button class="rsp-button" id="Scissors">SCISSORS</button>
+    </div>
+
+    <span class="human-choice">You Choose: </span>
+    <span class="computer-choice">Computer Choose: </span>
+    <div class="score-container">
+      <span class="round-info">Round : <span id="round-number">1</span></span>
+      <div class="score-info">
+        <span class="human-score-cont"
+          >Human Score: <span id="human-score">0</span></span
+        >
+        <span class="computer-score-cont"
+          >Computer Score: <span id="computer-score">0</span></span
+        >
+      </div>
+    </div>
+    <span class="res-container">Result: </span>
+    <button class="reset-button" id="reset">Play Again</button>
     <script src="script.js"></script>
   </body>
 </html>
